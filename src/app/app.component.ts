@@ -7,4 +7,18 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'T1-PO2';
+  pessoas = [
+    {
+      nome: 'Antonio Eugenio',
+      ocupacao: 'Desenvolvedor ANgular',
+    },
+    {
+      nome: 'Gabriel Facul',
+      ocupacao: 'Desenvolvedor Java',
+    },
+    {
+      nome: 'Bambu',
+      ocupacao: 'Maconheiro',
+    },
+  ];
 }
