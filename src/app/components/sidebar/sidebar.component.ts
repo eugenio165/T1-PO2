@@ -23,7 +23,9 @@ export const ROUTES: RouteInfo[] = [
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-
+  public T1 = [
+    { path: '/buscauniforme', title: 'Busca Uniforme',  icon: 'ni-zoom-split-in text-primary', class: '' },
+  ];
   public menuItems: any[];
   public isCollapsed = true;
 
