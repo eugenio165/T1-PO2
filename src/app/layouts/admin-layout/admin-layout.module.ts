@@ -1,4 +1,5 @@
 import { ComponentsModule } from './../../components/components.module';
+import { BuscauniformeComponent } from './../../pages/buscauniforme/buscauniforme.component';
 import { ApresentacaoComponent } from './../../pages/apresentacao/apresentacao.component';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,6 +33,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     IconsComponent,
     MapsComponent,
     ApresentacaoComponent,
+    BuscauniformeComponent,
   ],
 })
 
