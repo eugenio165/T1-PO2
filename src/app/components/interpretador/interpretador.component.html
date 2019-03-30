@@ -1,0 +1,75 @@
+<form [formGroup]="inputForm">
+  <!-- Funcao -->
+  <div class="row">
+    <div class="col-md-12 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+      <div class="form-group">
+        <input class="form-control" 
+          placeholder="f(x) = x^2 + 2"
+          formControlName="funcao"
+          [ngClass]="{'is-invalid': functionError, 'is-valid': !functionError}"
+        >
+        <div class="alert alert-danger" *ngIf="functionError">
+          {{ functionError }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Variaveis (a,b,delta, epsilon) -->
+  <div class="row">
+    <div class="col-md-12 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6">
+          <div class="form-group">
+            <input class="form-control" type="number"
+              placeholder="A" formControlName="a" 
+              [ngClass]="{'is-invalid': inputForm.hasError('intervaloValidator')}">
+            <div class="alert alert-danger" *ngIf="inputForm.hasError('intervaloValidator')">
+              {{ inputForm.getError('intervaloValidator') }}
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6">
+          <div class="form-group">
+            <input type="number"
+              class="form-control" placeholder="B" 
+              formControlName="b" [ngClass]="{'is-invalid': inputForm.hasError('intervaloValidator')}">
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6" *ngIf="options.delta">
+          <div class="form-group">
+            <input type="number"
+              class="form-control" placeholder="Δ"
+              formControlName="delta">
+          </div>
+          
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6" *ngIf="options.epsilon">
+          <div class="form-group">
+            <input type="number"
+              class="form-control" placeholder="ε"
+              formControlName="epsilon">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Botão -->
+<div class="row">
+  <div class="col-md-12 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+    <div class="float-right">
+      <button class="btn btn-icon btn-3 btn-danger" type="button"
+        [disabled]="!inputForm.dirty" (click)="limpar()">
+        <span class="btn-inner--icon"><i class="ni ni-fat-remove"></i></span>
+        <span class="btn-inner--text">Limpar</span>
+      </button>
+      <button class="btn btn-icon btn-3 btn-success" type="button"
+      [disabled]="!inputForm.valid" (click)="sendInfo()">
+        <span class="btn-inner--icon"><i class="ni ni-zoom-split-in"></i></span>
+        <span class="btn-inner--text">Buscar</span>
+      </button>
+    </div>
+  </div>
+</div>
