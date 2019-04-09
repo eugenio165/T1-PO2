@@ -5,7 +5,7 @@
       <div class="display-2 text-white title">Busca Uniforme</div>
       <!-- Componente do interpretador -->
       <app-interpretador
-        [options]="{ delta: true, epsilon: false }"
+        [options]="{ delta: true, epsilon: false, a: true, b: true, intervalo: true }"
         (functionData)="calcularBuscaUniforme($event, end);"
         (clearData)="clear()"
       ></app-interpretador>
@@ -14,6 +14,6 @@
 </div>
 
 <!-- Tabela de iteracoes -->
-<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [precisao]="precisao"></app-tabela-iteracoes>
+<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [precisao]="precisao" [erros]="erro"></app-tabela-iteracoes>
 <!-- Usado para scrollar ate o final da pagina, depois do calculo -->
 <div #end></div>

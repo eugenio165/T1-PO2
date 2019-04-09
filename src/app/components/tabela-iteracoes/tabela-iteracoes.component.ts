@@ -9,6 +9,7 @@ export class TabelaIteracoesComponent {
   @Input() colunas;
   @Input() iteracoes;
   @Input() precisao;
+  @Input() erros;
 
   constructor() { }
 
