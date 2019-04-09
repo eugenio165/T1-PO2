@@ -22,7 +22,11 @@ export class BuscauniformeComponent {
   }
 
   calcularBuscaUniforme(dados: DadosEntrada, div) {
-    this.precisao = dados.delta.toString().split('.')[1].length;
+    try {
+      this.precisao = dados.delta.toString().split('.')[1].length;
+    } catch (e) {
+      this.precisao = 2;
+    }
     this.iteracoes = this.passo(dados.a, dados.b, dados.delta, dados.funcao);
     this.activated = false;
 

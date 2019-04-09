@@ -11,7 +11,7 @@ export class InterpretadorComponent implements OnInit {
   // Opcoes para mostrar ou nao as caixas de entrada do delta ou epsilon
   @Input() options = { delta: true, epsilon: true };
   // Evento que emite os dados de entrada, quando o usuario aperta Buscar
-  @Output() functionData = new EventEmitter();
+  @Output() functionData = new EventEmitter<DadosEntrada>();
   // Evento que emite ao usuario apertar Limpar
   @Output() clearData = new EventEmitter();
 
@@ -60,6 +60,7 @@ export class InterpretadorComponent implements OnInit {
   }
 
   sendInfo() {
+    // Emite um evento de limpar dados (usados no componente pai para limpar a tabela e etc)
     this.clearData.emit();
     this.functionError = null;
     const form = this.inputForm.value;
@@ -85,6 +86,10 @@ export class InterpretadorComponent implements OnInit {
       this.functionError = 'Falta a variavel na declaração da funçao!';
       return;
     }
+    // Derivada primeira e segunda da funcao
+    const derivada1 = math.derivative(funcaoOBJ, ...funcaoOBJ.params);
+    const derivada2 = math.derivative(derivada1, ...funcaoOBJ.params).compile();
+    const d1 = derivada1.compile();
     // Emite os dados das funções para seu metodo usar
     this.functionData.emit({
       funcao: {
@@ -92,6 +97,9 @@ export class InterpretadorComponent implements OnInit {
         params: funcaoOBJ.params,
         // Compila a função inserida pelo usuário
         ...funcaoOBJ.expr.compile(),
+        // Primeira Derivada
+        d1: d1.eval,
+        d2: derivada2.eval,
       },
       a: form.a,
       b: form.b,
@@ -103,10 +111,17 @@ export class InterpretadorComponent implements OnInit {
 }
 
 interface DadosFuncao {
+  // Contém os caracteres das variaveis inseridas pelo usuario, ex: f(x) - x, f(u) - u;
   params: string[];
-  eval: any;
+  // Contém a função que o usuario inseriu pronta para uso
+  eval: Function;
+  // Contem a derivada primeira da funcao, pronta para uso
+  d1: Function;
+  // Derivada segunda da função inserida pelo usuario
+  d2: Function;
 }
 
+// Dados inseridos pelo usuario
 export interface DadosEntrada {
   funcao: DadosFuncao;
   a: number;
