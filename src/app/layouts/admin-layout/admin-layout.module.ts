@@ -1,3 +1,5 @@
+import { BissecaoComponent } from './../../pages/bissecao/bissecao.component';
+import { NewtonComponent } from './../../pages/newton/newton.component';
 import { ComponentsModule } from './../../components/components.module';
 import { BuscauniformeComponent } from './../../pages/buscauniforme/buscauniforme.component';
 import { ApresentacaoComponent } from './../../pages/apresentacao/apresentacao.component';
@@ -34,6 +36,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MapsComponent,
     ApresentacaoComponent,
     BuscauniformeComponent,
+    NewtonComponent,
+    BissecaoComponent,
   ],
 })
 
