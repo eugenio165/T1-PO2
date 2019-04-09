@@ -1,12 +1,12 @@
-<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
     <div class="header-body">
       <!-- Titulo da pagina -->
-      <div class="display-2 text-white title">Busca Uniforme</div>
+      <div class="display-2 text-white title">Método de Newton</div>
       <!-- Componente do interpretador -->
       <app-interpretador
-        [options]="{ delta: true, epsilon: false, a: true, b: true, intervalo: true }"
-        (functionData)="calcularBuscaUniforme($event, end);"
+        [options]="{ delta: false, epsilon: true, x0: false, intervalo: true }"
+        (functionData)="calcularNewton($event, end);"
         (clearData)="clear()"
       ></app-interpretador>
     </div>

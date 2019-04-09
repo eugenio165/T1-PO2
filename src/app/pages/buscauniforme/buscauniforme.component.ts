@@ -13,6 +13,7 @@ export class BuscauniformeComponent {
   precisao: number;
   iteracoes: Array<object>;
   activated = false;
+  erro;
 
   constructor() { }
 
@@ -24,9 +25,11 @@ export class BuscauniformeComponent {
   calcularBuscaUniforme(dados: DadosEntrada, div) {
     try {
       this.precisao = dados.delta.toString().split('.')[1].length;
+      this.precisao = (this.precisao >= 4) ? this.precisao : 4;
     } catch (e) {
-      this.precisao = 2;
+      this.precisao = 4;
     }
+    this.erro = null;
     this.iteracoes = this.passo(dados.a, dados.b, dados.delta, dados.funcao);
     this.activated = false;
 
@@ -65,6 +68,7 @@ export class BuscauniformeComponent {
       iteracoes.push({x: x, fx: fx, xk: xk, fxk: fxk, delta: delta});
 
       if (xk > b) {
+        this.erro = 'Erro! Fora do Intervalo!';
         return iteracoes;
       } else if (fxk > fx) {
         if (!this.activated) {

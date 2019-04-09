@@ -24,7 +24,9 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   public T1 = [
-    { path: '/buscauniforme', title: 'Busca Uniforme',  icon: 'ni-zoom-split-in text-primary', class: '' },
+    { path: '/buscauniforme', title: 'Busca Uniforme',  icon: 'ni-zoom-split-in text-danger', class: '' },
+    { path: '/newton', title: 'Método de Newton',  icon: 'ni-align-left-2 text-primary', class: '' },
+    { path: '/bissecao', title: 'Método da Bisseção',  icon: 'ni-scissors text-info', class: '' },
   ];
   public menuItems: any[];
   public isCollapsed = true;

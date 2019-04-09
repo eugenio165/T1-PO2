@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-md-12 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
       <div class="row">
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6" *ngIf="options.intervalo">
           <div class="form-group">
             <input class="form-control" type="number"
               placeholder="A" formControlName="a" 
@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6" *ngIf="options.intervalo">
           <div class="form-group">
             <input type="number"
               class="form-control" placeholder="B" 
@@ -49,6 +49,13 @@
             <input type="number"
               class="form-control" placeholder="ε"
               formControlName="epsilon">
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6" *ngIf="options.x0">
+          <div class="form-group">
+            <input type="number"
+              class="form-control" placeholder="X0"
+              formControlName="x0">
           </div>
         </div>
       </div>
