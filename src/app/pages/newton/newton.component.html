@@ -1,0 +1,19 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Titulo da pagina -->
+      <div class="display-2 text-white title">Método de Newton</div>
+      <!-- Componente do interpretador -->
+      <app-interpretador
+        [options]="{ delta: false, epsilon: true, x0: false, intervalo: true }"
+        (functionData)="calcularNewton($event, end);"
+        (clearData)="clear()"
+      ></app-interpretador>
+    </div>
+  </div>
+</div>
+
+<!-- Tabela de iteracoes -->
+<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [precisao]="precisao" [erros]="erro"></app-tabela-iteracoes>
+<!-- Usado para scrollar ate o final da pagina, depois do calculo -->
+<div #end></div>
