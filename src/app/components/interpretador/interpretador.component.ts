@@ -9,7 +9,7 @@ import * as math from 'mathjs';
 })
 export class InterpretadorComponent implements OnInit {
   // Opcoes para mostrar ou nao as caixas de entrada do delta ou epsilon
-  @Input() options = { delta: true, epsilon: true };
+  @Input() options = { delta: true, epsilon: true, x0: true, intervalo: true };
   // Evento que emite os dados de entrada, quando o usuario aperta Buscar
   @Output() functionData = new EventEmitter<DadosEntrada>();
   // Evento que emite ao usuario apertar Limpar
@@ -38,9 +38,14 @@ export class InterpretadorComponent implements OnInit {
     // Form de entrada do usuario
     this.inputForm = this.fb.group({
       funcao: [, Validators.required],
-      a: [, [Validators.required]],
-      b: [, Validators.required],
-    }, { validators: intervaloValidator });
+    });
+
+    // Se o A estiver ativado na configuracao, cria mais um campo do forms
+    if (this.options.intervalo) {
+      this.inputForm.addControl('a', this.fb.control({ value: null, disabled: false }, Validators.required));
+      this.inputForm.addControl('b', this.fb.control({ value: null, disabled: false }, Validators.required));
+      this.inputForm.setValidators(intervaloValidator);
+    }
 
     // Se o delta estiver ativado na configuracao, cria mais um campo do forms
     if (this.options.delta) {
@@ -50,6 +55,11 @@ export class InterpretadorComponent implements OnInit {
     // Se o epsilon estiver ativado na configuracao, cria mais um campo do forms
     if (this.options.epsilon) {
       this.inputForm.addControl('epsilon', this.fb.control({ value: null, disabled: false }, Validators.required));
+    }
+
+    // Se o epsilon estiver ativado na configuracao, cria mais um campo do forms
+    if (this.options.x0) {
+      this.inputForm.addControl('x0', this.fb.control({ value: null, disabled: false }, Validators.required));
     }
   }
 
@@ -105,6 +115,7 @@ export class InterpretadorComponent implements OnInit {
       b: form.b,
       delta: form.delta,
       epsilon: form.epsilon,
+      x0: form.x0,
     });
   }
 
@@ -128,4 +139,5 @@ export interface DadosEntrada {
   b: number;
   delta: number;
   epsilon: number;
+  x0: number;
 }
