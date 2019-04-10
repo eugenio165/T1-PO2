@@ -1,11 +1,11 @@
-<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+<div class="header bg-gradient-default pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
     <div class="header-body">
       <!-- Titulo da pagina -->
-      <div class="display-2 text-white title">Busca Uniforme</div>
+      <div class="display-2 text-white title">Busca Dicotômica</div>
       <!-- Componente do interpretador -->
       <app-interpretador
-        [options]="{ delta: true, epsilon: false, intervalo: true }"
+        [options]="{ delta: true, epsilon: true, intervalo: true }"
         (functionData)="calcularBuscaUniforme($event, end);"
         (clearData)="clear()"
       ></app-interpretador>
@@ -14,6 +14,6 @@
 </div>
 
 <!-- Tabela de iteracoes -->
-<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [precisao]="precisao" [erros]="erro"></app-tabela-iteracoes>
+<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [precisao]="precisao"></app-tabela-iteracoes>
 <!-- Usado para scrollar ate o final da pagina, depois do calculo -->
 <div #end></div>
