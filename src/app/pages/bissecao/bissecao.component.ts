@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DadosEntrada } from 'src/app/components/interpretador/interpretador.component';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-bissecao',
@@ -8,11 +9,14 @@ import { DadosEntrada } from 'src/app/components/interpretador/interpretador.com
 })
 export class BissecaoComponent {
   // Colunas para a tabela de iterações
-  colunas = [ 'x', 'fx', 'xk', 'fxk', 'delta'];
+  colunas = [ 'a', 'b', 'x', 'd1x'];
   // Quantidade de numeros apos a virgula para mostrar na tabela
   precisao: number;
   iteracoes: Array<object>;
   activated = false;
+  interacoesMax;
+  numeroInteracoes;
+  erro;
 
   constructor() { }
 
@@ -27,7 +31,13 @@ export class BissecaoComponent {
     } catch (e) {
       this.precisao = 2;
     }
-    this.iteracoes = this.passo(dados.a, dados.b, dados.epsilon, dados.x0, dados.funcao);
+
+    // Calcula a quantidade max de interações
+    this.interacoesMax = Math.round(Math.log(dados.epsilon / (dados.b - dados.a)) / Math.log(1 / 2));
+    this.numeroInteracoes = 0;
+    this.erro = null;
+    
+    this.iteracoes = this.passo(dados.a, dados.b, dados.funcao);
     this.activated = false;
 
     // Desce a página até o final da tabela;
@@ -37,41 +47,42 @@ export class BissecaoComponent {
   }
 
   // Faz uma iteração do Busca Uniforme
-  passo (a, b, epsilon, x0, funcao, iteracoes = []) {
-    let xk = x0;
+  passo (a, b, funcao, iteracoes = []) {
+
+    if (this.numeroInteracoes > this.interacoesMax ) {
+      this.erro = 'Atingiu o numero máximo de iterações';
+      return iteracoes;
+    }
+
+    const x = (a + b) / 2;
 
     // Pega a variavel inserida na funcao. Ex: f(x) - pega x; f(y) - pega y; f(z) - pega z
     const [arg] = funcao.params;
     const valorFuncao = {};
 
     // Cria objeto para passar pro parametro
-    valorFuncao[arg] = xk;
+    valorFuncao[arg] = x;
 
-    // Derivada primeira de xk
+    // Derivada primeira de x
     const d1x = funcao.d1(valorFuncao);
-    // Derivada segunda de xk
-    const d2x = funcao.d2(valorFuncao);
-
-    // xk+1 - calcula xk+1 com os valores do xk
-    const xk_1 = xk - (d1x / d2x);
 
     // Armazena os dados da iteração para ser mostrado
-    iteracoes.push({x: xk, d1x: d1x, d2x: d2x, xk_1: xk_1});
-
-    // Seta scope com xk_1 para usar na função
-    const valorXk_1 = {};
-    valorXk_1[arg] = xk_1;
-
-    // Se |f(XK+1)| < Epsilon, para
-    if (Math.abs(funcao.eval(valorXk_1)) < epsilon) {
+    iteracoes.push({a: a, b: b, x: x, d1x: d1x});
+    
+    // Condição de parada, derivada da primeira = 0
+    if (Math.round(d1x) === 0) {
       return iteracoes;
-    } else {
-      const divisor = (Math.abs(xk_1) > 1) ? Math.abs(xk_1) : 1;
-      if ( Math.abs(xk_1 - xk) / divisor < epsilon) {
-        return iteracoes;
-      }
+    }
 
-      return this.passo(a, b, epsilon, xk, funcao, iteracoes);
+    // Incrementa numero de iteracoes
+    this.numeroInteracoes ++;
+
+
+    // Define o proximo intervalo
+    if (Math.round(d1x) > 0) { // derivada da primeira > 0, a = x
+        return this.passo(a, x, funcao, iteracoes);
+    } else { // derivada da primeira > 0, b = x
+        return this.passo(x, b, funcao, iteracoes);
     }
   }
 

@@ -2,10 +2,10 @@
   <div class="container-fluid">
     <div class="header-body">
       <!-- Titulo da pagina -->
-      <div class="display-2 text-white title">Busca Uniforme</div>
+      <div class="display-2 text-white title">Método da Bisseção</div>
       <!-- Componente do interpretador -->
       <app-interpretador
-        [options]="{ delta: true, epsilon: false }"
+        [options]="{ intervalo: true, delta: false, epsilon: true }"
         (functionData)="calcularBissecao($event, end);"
         (clearData)="clear()"
       ></app-interpretador>
@@ -14,6 +14,6 @@
 </div>
 
 <!-- Tabela de iteracoes -->
-<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [precisao]="precisao"></app-tabela-iteracoes>
+<app-tabela-iteracoes [colunas]="colunas" [iteracoes]="iteracoes" [erros]="erro" [precisao]="precisao"></app-tabela-iteracoes>
 <!-- Usado para scrollar ate o final da pagina, depois do calculo -->
 <div #end></div>
