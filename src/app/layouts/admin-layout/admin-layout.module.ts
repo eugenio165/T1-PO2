@@ -1,3 +1,4 @@
+import { DicotomicaComponent } from './../../pages/dicotomica/dicotomica.component';
 import { BissecaoComponent } from './../../pages/bissecao/bissecao.component';
 import { NewtonComponent } from './../../pages/newton/newton.component';
 import { ComponentsModule } from './../../components/components.module';
@@ -38,6 +39,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BuscauniformeComponent,
     NewtonComponent,
     BissecaoComponent,
+    DicotomicaComponent,
   ],
 })
 

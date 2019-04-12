@@ -1,3 +1,4 @@
+import { DicotomicaComponent } from './../../pages/dicotomica/dicotomica.component';
 import { BissecaoComponent } from './../../pages/bissecao/bissecao.component';
 import { ApresentacaoComponent } from './../../pages/apresentacao/apresentacao.component';
 import { Routes } from '@angular/router';
@@ -14,6 +15,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'apresentacao',   component: ApresentacaoComponent },
     { path: 'buscauniforme',  component: BuscauniformeComponent },
     { path: 'newton',         component: NewtonComponent },
+    { path: 'dicotomica',     component: DicotomicaComponent },
     { path: 'bissecao',       component: BissecaoComponent },
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
