@@ -1,0 +1,19 @@
+<div [class]="class + ' header pb-8 pt-5 pt-md-8'">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Titulo da pagina -->
+      <div class="display-2 text-white title">{{ titulo }}</div>
+      <!-- Componente do interpretador -->
+      <app-interpretador
+        [options]="opcoes"
+        (functionData)="calcularMetodo($event, end)"
+        (clearData)="this.resposta = null;"
+        ></app-interpretador>
+    </div>
+  </div>
+</div>
+
+<!-- Tabela de iteracoes -->
+<app-tabela-iteracoes [colunas]="colunas" [resultado]="resposta?.res" [iteracoes]="resposta?.i" [precisao]="precisao" [erro]="resposta?.erro"></app-tabela-iteracoes>
+<!-- Usado para scrollar ate o final da pagina, depois do calculo -->
+<div #end></div>
