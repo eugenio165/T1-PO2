@@ -10,6 +10,7 @@ export class TabelaIteracoesComponent {
   @Input() iteracoes;
   @Input() precisao;
   @Input() erros;
+  @Input() resultado;
 
   constructor() { }
 
