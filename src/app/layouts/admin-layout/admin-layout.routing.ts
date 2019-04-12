@@ -10,12 +10,14 @@ import { UserProfileComponent } from '../../pages/user-profile/user-profile.comp
 import { TablesComponent } from '../../pages/tables/tables.component';
 import { BuscauniformeComponent } from 'src/app/pages/buscauniforme/buscauniforme.component';
 import { NewtonComponent } from 'src/app/pages/newton/newton.component';
+import { AureaComponent } from 'src/app/pages/aurea/aurea.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'apresentacao',   component: ApresentacaoComponent },
     { path: 'buscauniforme',  component: BuscauniformeComponent },
     { path: 'newton',         component: NewtonComponent },
     { path: 'dicotomica',     component: DicotomicaComponent },
+    { path: 'aurea',          component: AureaComponent },
     { path: 'bissecao',       component: BissecaoComponent },
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },

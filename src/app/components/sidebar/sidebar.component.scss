@@ -2,6 +2,12 @@
     height: 30px;
 }
 
+.upside-down {
+    transform: rotate(180deg);
+    margin-left: -20px;
+    margin-right: 20px;
+}
+
 .navbar-title {
     font-size: 15px;
     color: black;
