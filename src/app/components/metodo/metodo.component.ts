@@ -45,7 +45,11 @@ export abstract class MetodoComponent {
     // Armazena os dados da funcao na variavel para ser usado no componente filho;
     this.funcao = dados.funcao;
     // Pega o objeto de saida do passo (SaidaMetodo)
-    this.resposta = this.passo(dados.a, dados.b, [], dados.delta, dados.epsilon);
+    try {
+      this.resposta = this.passo(dados.a, dados.b, [], dados.delta, dados.epsilon);
+    } catch (e) {
+      this.resposta = {i: null, erro: 'Não convergiu!', res: null};
+    }
 
     // Scrolla o HTML, usado para scrollar até o final da tabela
     setTimeout(() => {

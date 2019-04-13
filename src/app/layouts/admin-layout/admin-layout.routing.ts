@@ -1,3 +1,4 @@
+import { FibonacciComponent } from './../../pages/fibonacci/fibonacci.component';
 import { DicotomicaComponent } from './../../pages/dicotomica/dicotomica.component';
 import { BissecaoComponent } from './../../pages/bissecao/bissecao.component';
 import { ApresentacaoComponent } from './../../pages/apresentacao/apresentacao.component';
@@ -18,6 +19,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'newton',         component: NewtonComponent },
     { path: 'dicotomica',     component: DicotomicaComponent },
     { path: 'aurea',          component: AureaComponent },
+    { path: 'fibonacci',      component: FibonacciComponent },
     { path: 'bissecao',       component: BissecaoComponent },
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
