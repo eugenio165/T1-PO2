@@ -121,7 +121,7 @@ export class InterpretadorComponent implements OnInit {
 
 }
 
-interface DadosFuncao {
+export interface DadosFuncao {
   // Contém os caracteres das variaveis inseridas pelo usuario, ex: f(x) - x, f(u) - u;
   params: string[];
   // Contém a função que o usuario inseriu pronta para uso

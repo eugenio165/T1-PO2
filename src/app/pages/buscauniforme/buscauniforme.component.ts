@@ -1,81 +1,59 @@
-import { DadosEntrada } from './../../components/interpretador/interpretador.component';
+import { MetodoComponent } from 'src/app/components/metodo/metodo.component';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-buscauniforme',
-  templateUrl: './buscauniforme.component.html',
-  styleUrls: ['./buscauniforme.component.scss']
+  templateUrl: './../../components/metodo/metodo.component.html',
+  styleUrls: ['./../../components/metodo/metodo.component.scss']
 })
-export class BuscauniformeComponent {
-  // Colunas para a tabela de iterações
+export class BuscauniformeComponent extends MetodoComponent {
+  titulo = 'Busca Uniforme';
+  class = 'bg-gradient-info';
+  opcoes = { delta: true, epsilon: false, intervalo: true };
   colunas = [ 'x', 'fx', 'xk', 'fxk', 'delta'];
-  // Quantidade de numeros apos a virgula para mostrar na tabela
-  precisao: number;
-  iteracoes: Array<object>;
   activated = false;
-  erro;
 
-  constructor() { }
-
-  // Limpa as iterações para nao mostrar a tabela
-  clear() {
-    this.iteracoes = null;
-  }
-
-  calcularBuscaUniforme(dados: DadosEntrada, div) {
-    try {
-      this.precisao = dados.delta.toString().split('.')[1].length;
-      this.precisao = (this.precisao >= 4) ? this.precisao : 4;
-    } catch (e) {
-      this.precisao = 4;
-    }
-    this.erro = null;
-    this.iteracoes = this.passo(dados.a, dados.b, dados.delta, dados.funcao);
-    this.activated = false;
-
-    // Desce a página até o final da tabela;
-    setTimeout(() => {
-      div.scrollIntoView({behavior: 'smooth'});
-    }, 100);
+  constructor() {
+    super();
   }
 
   // Faz uma iteração do Busca Uniforme
-  passo (a, b, delta, funcao, iteracoes = []) {
+  passo (a, b, iteracoes, delta) {
     // Inicia x no ponto a
-    let x = a;
+    let x = this.limitaPrecisao(a);
 
     // Para usar na eval da função
-    const obj = {};
-    // Pega a variavel inserida na funcao. Ex: f(x) - pega x; f(y) - pega y; f(z) - pega z
-    const [arg] = funcao.params;
-    obj[arg] = x;
+    const valorX = {};
+    valorX[this.arg] = x;
 
     let xanterior = x;
 
     while (true) {
       // F(x)
-      const fx = funcao.eval(obj);
+      const fx = this.limitaPrecisao(this.funcao.eval(valorX));
 
       // xk
       const xk = x + delta;
-      const newObj = {};
-      newObj[arg] = xk;
+      const valorXK = {};
+      valorXK[this.arg] = xk;
 
       // F(xk)
-      const fxk = funcao.eval(newObj);
+      const fxk = this.limitaPrecisao(this.funcao.eval(valorXK));
 
       // Armazena os dados da iteração para ser mostrado
       iteracoes.push({x: x, fx: fx, xk: xk, fxk: fxk, delta: delta});
 
       if (xk > b) {
-        this.erro = 'Erro! Fora do Intervalo!';
-        return iteracoes;
+        this.activated = false;
+        return {i: iteracoes, erro: 'Erro! Fora do Intervalo!'};
       } else if (fxk > fx) {
         if (!this.activated) {
           this.activated = true;
-          return this.passo(xanterior, b, delta / 10, funcao, iteracoes);
+          return this.passo(xanterior, b, iteracoes, delta / 10);
         } else {
-          return iteracoes;
+          const resString = 'X* = ' + x;
+          this.activated = false;
+          return {i: iteracoes, res: resString};
         }
       }
       // Armazena para voltar
@@ -83,12 +61,8 @@ export class BuscauniformeComponent {
 
       // Novo X
       x = xk;
-      obj[arg] = x;
+      valorX[this.arg] = x;
     }
-  }
-
-  scroll(el) {
-    el.scrollIntoView();
   }
 
 }

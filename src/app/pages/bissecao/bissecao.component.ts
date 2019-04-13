@@ -1,93 +1,58 @@
 import { Component } from '@angular/core';
-import { DadosEntrada } from 'src/app/components/interpretador/interpretador.component';
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
+import { MetodoComponent } from 'src/app/components/metodo/metodo.component';
 
 @Component({
   selector: 'app-bissecao',
-  templateUrl: './bissecao.component.html',
-  styleUrls: ['./bissecao.component.scss']
+  templateUrl: './../../components/metodo/metodo.component.html',
+  styleUrls: ['./../../components/metodo/metodo.component.scss']
 })
-export class BissecaoComponent {
+export class BissecaoComponent extends MetodoComponent {
+  titulo = 'Método da Bisseção';
+  class = 'bg-gradient-info';
+  opcoes = { intervalo: true, delta: false, epsilon: true };
   // Colunas para a tabela de iterações
   colunas = [ 'a', 'b', 'x', 'd1x'];
-  // Quantidade de numeros apos a virgula para mostrar na tabela
-  precisao: number;
-  iteracoes: Array<object>;
-  activated = false;
   interacoesMax;
   numeroInteracoes;
-  erro;
 
-  constructor() { }
-
-  // Limpa as iterações para nao mostrar a tabela
-  clear() {
-    this.iteracoes = null;
+  constructor() {
+    super();
   }
 
-  calcularBissecao(dados: DadosEntrada, div) {
-    try {
-      this.precisao = dados.delta.toString().split('.')[1].length;
-    } catch (e) {
-      this.precisao = 2;
-    }
-
-    // Calcula a quantidade max de interações
-    this.interacoesMax = Math.round(Math.log(dados.epsilon / (dados.b - dados.a)) / Math.log(1 / 2));
-    this.numeroInteracoes = 0;
-    this.erro = null;
-    
-    this.iteracoes = this.passo(dados.a, dados.b, dados.funcao);
-    this.activated = false;
-
-    // Desce a página até o final da tabela;
-    setTimeout(() => {
-      div.scrollIntoView({behavior: 'smooth'});
-    }, 100);
-  }
-
-  // Faz uma iteração do Busca Uniforme
-  passo (a, b, funcao, iteracoes = []) {
+  // Faz uma iteração do Método da Bisseção
+  passo (a, b, iteracoes = []) {
 
     if (this.numeroInteracoes > this.interacoesMax ) {
-      this.erro = 'Atingiu o numero máximo de iterações';
-      return iteracoes;
+      return {i: iteracoes, erro: 'Atingiu o numero máximo de iterações'};
     }
 
-    const x = (a + b) / 2;
-
-    // Pega a variavel inserida na funcao. Ex: f(x) - pega x; f(y) - pega y; f(z) - pega z
-    const [arg] = funcao.params;
-    const valorFuncao = {};
+    const x = this.limitaPrecisao((a + b) / 2);
 
     // Cria objeto para passar pro parametro
-    valorFuncao[arg] = x;
+    const valorFuncao = {};
+    valorFuncao[this.arg] = x;
 
     // Derivada primeira de x
-    const d1x = funcao.d1(valorFuncao);
+    const d1x = this.limitaPrecisao(this.funcao.d1(valorFuncao));
 
     // Armazena os dados da iteração para ser mostrado
     iteracoes.push({a: a, b: b, x: x, d1x: d1x});
-    
+
     // Condição de parada, derivada da primeira = 0
     if (Math.round(d1x) === 0) {
-      return iteracoes;
+      const resString = 'X* = ' + this.limitaPrecisao((a + b) / 2);
+      return {i: iteracoes, res: resString};
     }
 
     // Incrementa numero de iteracoes
     this.numeroInteracoes ++;
 
-
     // Define o proximo intervalo
     if (Math.round(d1x) > 0) { // derivada da primeira > 0, a = x
-        return this.passo(a, x, funcao, iteracoes);
+      return this.passo(a, x, iteracoes);
     } else { // derivada da primeira > 0, b = x
-        return this.passo(x, b, funcao, iteracoes);
+      return this.passo(x, b, iteracoes);
     }
-  }
-
-  scroll(el) {
-    el.scrollIntoView();
   }
 
 }
