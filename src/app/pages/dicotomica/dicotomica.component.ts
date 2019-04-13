@@ -1,45 +1,24 @@
-import { DadosEntrada } from './../../components/interpretador/interpretador.component';
+import { MetodoComponent } from 'src/app/components/metodo/metodo.component';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dicotomica',
-  templateUrl: './dicotomica.component.html',
-  styleUrls: ['./dicotomica.component.scss']
+  templateUrl: './../../components/metodo/metodo.component.html',
+  styleUrls: ['./../../components/metodo/metodo.component.scss']
 })
-export class DicotomicaComponent {
-  // Colunas para a tabela de iterações
+export class DicotomicaComponent extends MetodoComponent {
+  titulo = 'Busca Dicotômica';
+  class = 'bg-gradient-default';
+  opcoes = { delta: true, epsilon: true, intervalo: true };
   colunas = [ 'a', 'b', 'x', 'z', 'fx', 'fz'];
-  // Quantidade de numeros apos a virgula para mostrar na tabela
-  precisao: number;
-  iteracoes: Array<object>;
-  arg;
 
-  constructor() { }
-
-  // Limpa as iterações para nao mostrar a tabela
-  clear() {
-    this.iteracoes = null;
-  }
-
-  calcularBuscaUniforme(dados: DadosEntrada, div) {
-    try {
-      this.precisao = dados.delta.toString().split('.')[1].length;
-      this.precisao = (this.precisao >= 4) ? this.precisao : 4;
-    } catch (e) {
-      this.precisao = 4;
-    }
-    // Pega a variavel inserida na funcao. Ex: f(x) - pega x; f(y) - pega y; f(z) - pega z
-    [this.arg] = dados.funcao.params;
-    this.iteracoes = this.passo(dados.a, dados.b, dados.delta, dados.epsilon, dados.funcao);
-    // Desce a página até o final da tabela;
-    setTimeout(() => {
-      div.scrollIntoView({behavior: 'smooth'});
-    }, 100);
+  constructor() {
+    super();
   }
 
   // Faz uma iteração da Busca Dicotômica
-  passo (a, b, delta, epsilon, funcao, iteracoes = []) {
-    const media = (a + b) / 2;
+  passo (a, b, iteracoes = [], delta, epsilon) {
+    const media = this.limitaPrecisao((a + b) / 2);
     const x = (media) - delta;
     const z = (media) + delta;
 
@@ -51,24 +30,21 @@ export class DicotomicaComponent {
     const valorZ = {};
     valorZ[this.arg] = z;
 
-    const fx = funcao.eval(valorX);
-    const fz = funcao.eval(valorZ);
+    const fx = this.limitaPrecisao(this.funcao.eval(valorX));
+    const fz = this.limitaPrecisao(this.funcao.eval(valorZ));
 
     iteracoes.push({a: a, b: b, x: x, z: z, fx: fx, fz: fz});
 
     // Condição de parada
     if (Math.abs(b - a) < epsilon) {
-      return iteracoes;
+      const resString = 'X* = ' + media;
+      return {i: iteracoes, res: resString};
       // Se f(x) > f(z)
     } else if (fx > fz) {
-      return this.passo(x, b, delta, epsilon, funcao, iteracoes);
+      return this.passo(x, b, iteracoes, delta, epsilon);
     } else {
-      return this.passo(a, z, delta, epsilon, funcao, iteracoes);
+      return this.passo(a, z, iteracoes, delta, epsilon);
     }
-  }
-
-  scroll(el) {
-    el.scrollIntoView();
   }
 
 }
