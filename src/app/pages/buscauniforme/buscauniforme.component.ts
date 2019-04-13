@@ -51,7 +51,7 @@ export class BuscauniformeComponent extends MetodoComponent {
           this.activated = true;
           return this.passo(xanterior, b, iteracoes, delta / 10);
         } else {
-          const resString = 'X* = ' + x;
+          const resString = 'X* = ' + this.limitaPrecisao(x);
           this.activated = false;
           return {i: iteracoes, res: resString};
         }

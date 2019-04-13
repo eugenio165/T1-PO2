@@ -22,9 +22,9 @@ export abstract class MetodoComponent {
   // Objeto para setar as configuracoes do interpretador
   abstract opcoes: object;
   // Quantidade de numeros apos a virgula para mostrar na tabela
-  protected precisao: number;
+  precisao: number;
   // Objeto de saida do metodo para ser enviado para a tabela
-  protected resposta: SaidaMetodo;
+  resposta: SaidaMetodo;
   // Recebe a string com a variavel iniserida pelo usuario
   protected arg: string;
   // Dados da funcao inserida pelo usuario;
