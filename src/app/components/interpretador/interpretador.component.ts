@@ -1,7 +1,14 @@
-import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as math from 'mathjs';
+
+export interface Options {
+  delta?: boolean;
+  epsilon?: boolean;
+  intervalo?: boolean;
+  x0?: boolean;
+  multi?: boolean;
+}
 
 @Component({
   selector: 'app-interpretador',
@@ -10,7 +17,7 @@ import * as math from 'mathjs';
 })
 export class InterpretadorComponent implements OnInit {
   // Opcoes para mostrar ou nao as caixas de entrada do delta ou epsilon
-  @Input() options = { delta: true, epsilon: true, x0: true, intervalo: true };
+  @Input() options: Options = { delta: true, epsilon: true, x0: true, intervalo: true, multi: false };
   // Evento que emite os dados de entrada, quando o usuario aperta Buscar
   @Output() functionData = new EventEmitter<DadosEntrada>();
   // Evento que emite ao usuario apertar Limpar
@@ -88,19 +95,33 @@ export class InterpretadorComponent implements OnInit {
       // Declaração da função no forms está errado!, mostra o div com texto de erro!
       this.functionError = 'O formato da função está errada! Ex: f(x) = 2x^2 + 7x + 2';
       return;
-    } else if (funcaoOBJ.params.length > 1) {
-      // Declaração da função no forms está errado!, mostra o div com texto de erro!
-      this.functionError = 'Somente funções mono variáveis por favor!';
-      return;
-    } else if (!funcaoOBJ.params.length) {
+    } else if (funcaoOBJ.params.length > 1 && !this.options.multi) {
       // Declaração da função no forms está errado!, mostra o div com texto de erro!
       this.functionError = 'Falta a variavel na declaração da funçao!';
       return;
     }
     // Derivada primeira e segunda da funcao
-    const derivada1 = math.derivative(funcaoOBJ, ...funcaoOBJ.params);
-    const derivada2 = math.derivative(derivada1, ...funcaoOBJ.params).compile();
-    const d1 = derivada1.compile();
+    let derivada1, derivada2;
+    if (this.options.multi) {
+      const derivadas1 = {};
+      const derivadas2 = {};
+      for (let i = 0; i < funcaoOBJ.params.length; i++) {
+        const d1 = math.derivative(funcaoOBJ, funcaoOBJ.params[i]);
+        const d1Compiled = d1.compile();
+        derivadas1[funcaoOBJ.params[i]] = d1Compiled.eval;
+        const d2Compiled = math.derivative(d1, funcaoOBJ.params[i]).compile();
+        derivadas2[funcaoOBJ.params[i]] = d2Compiled.eval;
+      }
+      derivada1 = derivadas1;
+      derivada2 = derivadas2;
+    } else {
+      // Mono variaveis
+      let d1 = math.derivative(funcaoOBJ, ...funcaoOBJ.params);
+      const d2 = math.derivative(d1, ...funcaoOBJ.params).compile();
+      d1 = d1.compile();
+      derivada1 = d1.eval;
+      derivada2 = d2.eval;
+    }
     // Emite os dados das funções para seu metodo usar
     this.functionData.emit({
       funcao: {
@@ -109,8 +130,8 @@ export class InterpretadorComponent implements OnInit {
         // Compila a função inserida pelo usuário
         ...funcaoOBJ.expr.compile(),
         // Primeira Derivada
-        d1: d1.eval,
-        d2: derivada2.eval,
+        d1: derivada1,
+        d2: derivada2,
       },
       a: form.a,
       b: form.b,

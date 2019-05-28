@@ -1,3 +1,4 @@
+import { CilindricasComponent } from './../../pages/cilindricas/cilindricas.component';
 import { FibonacciComponent } from './../../pages/fibonacci/fibonacci.component';
 import { AureaComponent } from './../../pages/aurea/aurea.component';
 import { DicotomicaComponent } from './../../pages/dicotomica/dicotomica.component';
@@ -34,6 +35,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DicotomicaComponent,
     FibonacciComponent,
     AureaComponent,
+    CilindricasComponent,
   ],
 })
 
