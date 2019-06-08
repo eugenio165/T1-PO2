@@ -128,6 +128,7 @@ export class InterpretadorComponent implements OnInit {
         // Contem qual letra foi usada pra fazer a função; Ex; f(x) - variavel x; f(y) - variavel y
         params: funcaoOBJ.params,
         // Compila a função inserida pelo usuário
+        obj: funcaoOBJ,
         ...funcaoOBJ.expr.compile(),
         // Primeira Derivada
         d1: derivada1,
@@ -144,6 +145,7 @@ export class InterpretadorComponent implements OnInit {
 }
 
 export interface DadosFuncao {
+  obj: any;
   // Contém os caracteres das variaveis inseridas pelo usuario, ex: f(x) - x, f(u) - u;
   params: string[];
   // Contém a função que o usuario inseriu pronta para uso

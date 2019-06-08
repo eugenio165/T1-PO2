@@ -1,15 +1,15 @@
 import { SaidaMetodo } from './metodo.component';
 import { DadosEntrada, DadosFuncao, Options } from './../interpretador/interpretador.component';
-
+import * as math from 'mathjs';
 
 // Objeto que a função passo retornará
 export interface SaidaMetodo {
   // Array das iterações para mostra na tabela
-  i: Array<object>;
+  i?: Array<object>;
   // String de resposta para ser mostrada no final da tabela caso sucesso
-  res: string;
+  res?: string;
   // String de erro para ser apresentado caso der erro
-  erro: string;
+  erro?: string;
 }
 
 export abstract class MetodoComponent {
@@ -29,6 +29,7 @@ export abstract class MetodoComponent {
   protected arg: string;
   // Dados da funcao inserida pelo usuario;
   protected funcao: DadosFuncao;
+  callstack = 0;
 
   constructor() { }
 
@@ -57,8 +58,53 @@ export abstract class MetodoComponent {
     }, 100);
   }
 
-  newton(a, b, epsilon, funcao, arg, xk?) {
-    xk = (!!xk) ? a : xk;
+  calculaY(xk: Array<number>, direcao: Array<number>, delta?: number) {
+    const array = [];
+    for (let i = 0; i < xk.length; i++) {
+      if (delta === undefined) {
+        array.push(xk[i] + '+ d*' + direcao[i]);
+      } else {
+        array.push(xk[i] + delta * direcao[i]);
+      }
+    }
+    return array;
+  }
+
+  calculaSubtracao(ar1: Array<number>, ar2: Array<number>) {
+    return ar1.map((val, index) => {
+      return val - ar2[index];
+    });
+  }
+
+  calculaNormal(ar1: Array<number>) {
+    const sum = ar1.reduce((prev, current) => {
+      return prev + Math.pow(current, 2);
+    }, 0);
+    return Math.sqrt(sum);
+  }
+
+  // Gera a função para ser minimizada via newton atraves dos valores de delta
+  calculaNovaFuncao(xk) {
+    let funcstring: string = this.funcao.obj.expr.toString();
+    this.funcao.params.forEach((param , index) => {
+      const regex = new RegExp(param, 'g');
+      funcstring = funcstring.replace(regex, '(' + xk[index] + ')');
+    });
+    const newFunc = math.parse('f(d) = ' + funcstring);
+    let d1 = math.derivative(newFunc, 'd');
+    const d2 = math.derivative(d1, 'd').compile();
+    d1 = d1.compile();
+    return {
+      params: newFunc.params,
+      obj: newFunc,
+      ...newFunc.expr.compile(),
+      d1: d1.eval,
+      d2: d2.eval,
+    };
+  }
+
+  newton(epsilon, funcao, arg, xk?) {
+    xk = (!xk) ? 0 : xk;
     // Objeto para passar pra funcao avaliar o resultado
     const valorFuncao = {};
     valorFuncao[arg] = xk;
@@ -69,23 +115,29 @@ export abstract class MetodoComponent {
     const d2x = this.limitaPrecisao(funcao.d2(valorFuncao));
 
     // xk+1 - calcula xk+1 com os valores do xk
-    const xk_1 = this.limitaPrecisao(xk - (d1x / d2x));
-
+    let xk_1;
+    if (d2x === 0) {
+      xk_1 = this.limitaPrecisao(xk);
+    } else {
+      xk_1 = this.limitaPrecisao(xk - (d1x / d2x));
+    }
     // Seta scope com xk_1 para usar na função
     const valorXk_1 = {};
     valorXk_1[arg] = xk_1;
 
-    // Se |f(XK+1)| < Epsilon, para
-    if (xk < a || xk > b) {
-      return xk;
-    } else if (Math.abs(funcao.eval(valorXk_1)) < epsilon) {
+    this.callstack++;
+    if (this.callstack > 200) {
+      this.callstack = 0;
+      return xk_1;
+    }
+    if (Math.abs(funcao.eval(valorXk_1)) < epsilon) {
       return xk_1;
     } else {
       const divisor = (Math.abs(xk_1) > 1) ? Math.abs(xk_1) : 1;
       if (Math.abs(xk_1 - xk) / divisor < epsilon) {
         return xk_1;
       }
-      return this.newton(a, b, epsilon, funcao, arg, xk_1);
+      return this.newton(epsilon, funcao, arg, xk_1);
     }
   }
 
