@@ -13,22 +13,31 @@ export interface SaidaMetodo {
 }
 
 export abstract class MetodoComponent {
+
   // Titulo do componente
   abstract titulo: string;
+
   // Classe do css
   abstract class: string;
+
   // Colunas para a tabela de iterações
   abstract colunas: Array<string>;
+
   // Objeto para setar as configuracoes do interpretador
   abstract opcoes: Options;
+
   // Quantidade de numeros apos a virgula para mostrar na tabela
   precisao: number;
+
   // Objeto de saida do metodo para ser enviado para a tabela
   resposta: SaidaMetodo;
+
   // Recebe a string com a variavel iniserida pelo usuario
   protected arg: string;
+
   // Dados da funcao inserida pelo usuario;
   protected funcao: DadosFuncao;
+
 
   constructor() { }
 

@@ -76,6 +76,38 @@ export class InterpretadorComponent implements OnInit {
     this.inputForm.reset();
     this.clearData.emit();
   }
+  gradiente(): Array<number> {
+    let resultado: Array<number> = [];
+    const form = this.inputForm.value;
+    let funcaoOBJ;
+    try {
+      // Lê a função inserida pelo usuário
+      funcaoOBJ = math.parse(form.funcao);
+    } catch (e) {
+      // Declaração da função no forms está errado!, mostra o div com texto de erro!
+      this.functionError = 'Há algum símbolo não suportado na função!!';
+      return;
+    }
+
+    if (funcaoOBJ.type !== 'FunctionAssignmentNode') {
+      // Declaração da função no forms está errado!, mostra o div com texto de erro!
+      this.functionError = 'O formato da função está errada! Ex: f(x) = 2x^2 + 7x + 2';
+      return;
+    } else if (funcaoOBJ.params.length > 1 && !this.options.multi) {
+      // Declaração da função no forms está errado!, mostra o div com texto de erro!
+      this.functionError = 'Falta a variavel na declaração da funçao!';
+      return;
+    }
+    const derivadas1 = {};
+    let derivada1;
+      for (let i = 0; i < funcaoOBJ.params.length; i++) {
+        const d1 = math.derivative(funcaoOBJ, funcaoOBJ.params[i]);
+        const d1Compiled = d1.compile();
+        derivadas1[funcaoOBJ.params[i]] = d1Compiled.eval;
+      }
+      derivada1 = derivadas1;
+
+  }
 
   sendInfo() {
     // Emite um evento de limpar dados (usados no componente pai para limpar a tabela e etc)

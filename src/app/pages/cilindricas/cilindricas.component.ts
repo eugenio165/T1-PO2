@@ -1,5 +1,6 @@
 import { Options } from './../../components/interpretador/interpretador.component';
 import { MetodoComponent, SaidaMetodo } from 'src/app/components/metodo/metodo.component';
+import { ModeloT2Component } from 'src/app/components/modelo-t2/modelo-t2.component';
 import { Component } from '@angular/core';
 import * as math from 'mathjs';
 
@@ -8,7 +9,7 @@ import * as math from 'mathjs';
   templateUrl: './../../components/metodo/metodo.component.html',
   styleUrls: ['./../../components/metodo/metodo.component.scss'],
 })
-export class CilindricasComponent extends MetodoComponent {
+export class CilindricasComponent extends ModeloT2Component {
   titulo = 'Coordenadas Cíclicas';
   class = 'bg-gradient-info';
   opcoes: Options = { epsilon: true, x0: true, multi: true };
@@ -17,6 +18,17 @@ export class CilindricasComponent extends MetodoComponent {
 
   constructor() {
     super();
+  }
+  calculaDirecao(): number {
+
+  }
+  criterioDeParada(): boolean {
+    // Gradiente de F(xk) => e
+
+
+  }
+  calculaXk(): number {
+
   }
 
   passo(a: number, b: number, iteracoes: object[], delta?: number, epsilon?: number, x0?: string): SaidaMetodo {

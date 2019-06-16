@@ -6,6 +6,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InterpretadorComponent } from './interpretador/interpretador.component';
+import { ModeloT2Component } from './modelo-t2/modelo-t2.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { InterpretadorComponent } from './interpretador/interpretador.component'
     SidebarComponent,
     InterpretadorComponent,
     TabelaIteracoesComponent,
+    ModeloT2Component,
   ],
   exports: [
     SidebarComponent,
