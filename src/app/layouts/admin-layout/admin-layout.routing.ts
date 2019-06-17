@@ -1,5 +1,6 @@
+import { CiclicasComponent } from './../../pages/ciclicas/ciclicas.component';
+import { GradienteComponent } from './../../pages/gradiente/gradiente.component';
 import { HookeAndJeevesComponent } from './../../pages/hooke&jeeves/hooke-and-jeeves.component';
-import { CilindricasComponent } from './../../pages/cilindricas/cilindricas.component';
 import { FibonacciComponent } from './../../pages/fibonacci/fibonacci.component';
 import { DicotomicaComponent } from './../../pages/dicotomica/dicotomica.component';
 import { BissecaoComponent } from './../../pages/bissecao/bissecao.component';
@@ -17,9 +18,9 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'aurea',          component: AureaComponent },
     { path: 'fibonacci',      component: FibonacciComponent },
     { path: 'bissecao',       component: BissecaoComponent },
-    { path: 'coordenadas-ciclicas', component: CilindricasComponent },
+    { path: 'coordenadas-ciclicas', component: CiclicasComponent },
     { path: 'hooke&jeeves', component: HookeAndJeevesComponent},
-    // { path: 'gradiente', component: },
+    { path: 'gradiente', component: GradienteComponent },
     // { path: 'newton-irrestrito', component: },
     // { path: 'gradiente-conjugado', component: },
     // { path: 'fletcher&reeves', component: },

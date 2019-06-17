@@ -10,7 +10,7 @@ import * as math from 'mathjs';
 })
 export class HookeAndJeevesComponent extends MetodoComponent {
     titulo = 'Hooke & Jeeves';
-    class = 'bg-gradient-info';
+    class = 'bg-gradient-danger';
     opcoes: Options = { epsilon: true, x0: true, multi: true };
     colunas = {
         j: 'j',

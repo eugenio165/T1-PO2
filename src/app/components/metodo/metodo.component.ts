@@ -49,6 +49,7 @@ export abstract class MetodoComponent {
     try {
       this.resposta = this.passo(dados.a, dados.b, [], dados.delta, dados.epsilon, dados.x0);
     } catch (e) {
+      console.log(e);
       this.resposta = { i: null, erro: 'Não convergiu!', res: null };
     }
 

@@ -1,15 +1,15 @@
-import { Options } from './../../components/interpretador/interpretador.component';
+import { Options } from '../../components/interpretador/interpretador.component';
 import { MetodoComponent, SaidaMetodo } from 'src/app/components/metodo/metodo.component';
 import { Component } from '@angular/core';
 import * as math from 'mathjs';
 
 @Component({
-  selector: 'app-cilindricas',
+  selector: 'app-ciclicas',
   templateUrl: './../../components/metodo/metodo.component.html',
   styleUrls: ['./../../components/metodo/metodo.component.scss'],
 })
-export class CilindricasComponent extends MetodoComponent {
-  titulo = 'Coordenadas Cilíndricas';
+export class CiclicasComponent extends MetodoComponent {
+  titulo = 'Coordenadas Cíclicas';
   class = 'bg-gradient-info';
   opcoes: Options = { epsilon: true, x0: true, multi: true };
   colunas = [ 'j', 'Yj', 'Dj', 'Lambida', 'Yj1'];
@@ -50,20 +50,12 @@ export class CilindricasComponent extends MetodoComponent {
       var index = 1;
       for (index = 1; index <= this.funcao.params.length; index++) {
         const direcao = this.pegaDirecaoClindricas(index);
-        console.log('');
-        console.log('');
-        console.log('NOVA ITERAÇÃO -----------------');
-        console.log('Direcao: ', direcao);
         let lambida;
         try {
           y.push(this.calculaY(y[index - 1], direcao));
-          console.log('NovoY: ', y[index]);
           const func = this.calculaNovaFuncao(y[index]);
-          console.log('Nova FUncao: ', func.obj.toString());
           lambida = this.newton(epsilon, func, 'd');
-          console.log('Delta: ', lambida);
           y[index] = this.calculaY(y[index - 1], direcao, lambida);
-          console.log('Y[j+1]: ', y[index]);
           const obj = {};
           y[index].map((param, g) => {
             obj[this.funcao.params[g]] = param;
@@ -79,7 +71,6 @@ export class CilindricasComponent extends MetodoComponent {
       }
       sub = this.calculaSubtracao(y[index - 1], xk);
       xk = y[index - 1];
-      console.log('subtracao: ', sub);
     }
     return { i: iteracoes };
   }

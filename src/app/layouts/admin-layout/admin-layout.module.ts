@@ -1,5 +1,5 @@
+import { CiclicasComponent } from './../../pages/ciclicas/ciclicas.component';
 import { HookeAndJeevesComponent } from './../../pages/hooke&jeeves/hooke-and-jeeves.component';
-import { CilindricasComponent } from './../../pages/cilindricas/cilindricas.component';
 import { FibonacciComponent } from './../../pages/fibonacci/fibonacci.component';
 import { AureaComponent } from './../../pages/aurea/aurea.component';
 import { DicotomicaComponent } from './../../pages/dicotomica/dicotomica.component';
@@ -8,6 +8,7 @@ import { NewtonComponent } from './../../pages/newton/newton.component';
 import { ComponentsModule } from './../../components/components.module';
 import { BuscauniformeComponent } from './../../pages/buscauniforme/buscauniforme.component';
 import { ApresentacaoComponent } from './../../pages/apresentacao/apresentacao.component';
+import { GradienteComponent } from './../../pages/gradiente/gradiente.component';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -29,6 +30,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
   ],
   declarations: [
+    GradienteComponent,
     ApresentacaoComponent,
     BuscauniformeComponent,
     NewtonComponent,
@@ -36,7 +38,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DicotomicaComponent,
     FibonacciComponent,
     AureaComponent,
-    CilindricasComponent,
+    CiclicasComponent,
     HookeAndJeevesComponent,
   ],
 })

@@ -151,9 +151,9 @@ export interface DadosFuncao {
   // Contém a função que o usuario inseriu pronta para uso
   eval: Function;
   // Contem a derivada primeira da funcao, pronta para uso
-  d1: Function;
+  d1: any;
   // Derivada segunda da função inserida pelo usuario
-  d2: Function;
+  d2: any;
 }
 
 // Dados inseridos pelo usuario
