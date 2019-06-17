@@ -45,7 +45,7 @@ export class InterpretadorComponent implements OnInit {
     };
     // Form de entrada do usuario
     this.inputForm = this.fb.group({
-      funcao: [, Validators.required],
+      funcao: ['f(x1, x2) = (x1 -2)^4 + (x1-2x2)^2', Validators.required],
     });
 
     // Se o A estiver ativado na configuracao, cria mais um campo do forms
@@ -62,12 +62,12 @@ export class InterpretadorComponent implements OnInit {
 
     // Se o epsilon estiver ativado na configuracao, cria mais um campo do forms
     if (this.options.epsilon) {
-      this.inputForm.addControl('epsilon', this.fb.control({ value: null, disabled: false }, Validators.required));
+      this.inputForm.addControl('epsilon', this.fb.control({ value: 0.1, disabled: false }, Validators.required));
     }
 
     // Se o epsilon estiver ativado na configuracao, cria mais um campo do forms
     if (this.options.x0) {
-      this.inputForm.addControl('x0', this.fb.control({ value: null, disabled: false }, Validators.required));
+      this.inputForm.addControl('x0', this.fb.control({ value: '0, 3', disabled: false }, Validators.required));
     }
   }
 

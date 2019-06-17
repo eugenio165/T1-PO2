@@ -1,3 +1,4 @@
+import { HookeAndJeevesComponent } from './../../pages/hooke&jeeves/hooke-and-jeeves.component';
 import { CilindricasComponent } from './../../pages/cilindricas/cilindricas.component';
 import { FibonacciComponent } from './../../pages/fibonacci/fibonacci.component';
 import { AureaComponent } from './../../pages/aurea/aurea.component';
@@ -36,6 +37,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FibonacciComponent,
     AureaComponent,
     CilindricasComponent,
+    HookeAndJeevesComponent,
   ],
 })
 

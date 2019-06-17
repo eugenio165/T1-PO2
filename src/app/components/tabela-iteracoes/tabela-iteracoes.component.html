@@ -11,14 +11,19 @@
             <thead class="thead-dark">
               <tr>
                 <th scope="col">K</th>
-                <th scope="col" *ngFor="let col of colunas">{{ col }}</th>
+                <th scope="col" *ngFor="let col of colunasKeys">{{ colunasObj[col] }}</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let iteracao of iteracoes; let i = index" [ngClass]="{'result': i + 1 == iteracoes.length}">
-                <td>{{ i }}</td>
-                <td *ngFor="let col of colunas;">
-                  <ng-container *ngIf="iteracao[col].length; else elseTemplate">
+                <ng-container *ngIf="iteracao['k']; else SEMK">
+                  <td>{{ iteracao['k'] }}</td>
+                </ng-container>
+                <ng-template #SEMK>
+                  <td>{{ i }}</td>
+                </ng-template>
+                <td *ngFor="let col of colunasKeys;">
+                  <ng-container *ngIf="iteracao[col]?.length; else elseTemplate">
                     (
                     <ng-container *ngFor="let num of iteracao[col]">
                     {{ num | number:'1.0-' + (precisao)}}, 

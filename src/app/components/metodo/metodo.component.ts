@@ -18,7 +18,7 @@ export abstract class MetodoComponent {
   // Classe do css
   abstract class: string;
   // Colunas para a tabela de iterações
-  abstract colunas: Array<string>;
+  abstract colunas: Array<string> | Object;
   // Objeto para setar as configuracoes do interpretador
   abstract opcoes: Options;
   // Quantidade de numeros apos a virgula para mostrar na tabela
