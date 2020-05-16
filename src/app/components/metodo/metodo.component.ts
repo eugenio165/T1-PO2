@@ -1,4 +1,3 @@
-import { SaidaMetodo } from './metodo.component';
 import { DadosEntrada, DadosFuncao, Options } from './../interpretador/interpretador.component';
 import * as math from 'mathjs';
 
@@ -29,12 +28,17 @@ export abstract class MetodoComponent {
   protected arg: string;
   // Dados da funcao inserida pelo usuario;
   protected funcao: DadosFuncao;
+
   callstack = 0;
+
+  protected entrada: DadosEntrada;
 
   constructor() { }
 
   calcularMetodo(dados: DadosEntrada, div) {
     // Pega a precisao dos floats para ser usado, de acordo com o delta, com precisao minima de 4 casas
+    this.entrada = dados;
+
     try {
       this.precisao = dados.delta.toString().split('.')[1].length;
       this.precisao = (this.precisao >= 4) ? this.precisao : 4;
