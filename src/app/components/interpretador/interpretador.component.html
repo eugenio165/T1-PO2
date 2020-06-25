@@ -80,3 +80,20 @@
     </div>
   </div>
 </div>
+
+<br>
+<div class="alert alert-success" *ngIf="(!!messages && messages.length !== 0) || !!errorMessage && errorMessage != ''">
+  <div class="div" *ngFor="let msg of messages; let i = index">
+    <strong>
+      {{ msg }}
+    </strong>
+    <ng-container *ngIf="i === messages.length;">
+      <br>
+      <br>
+    </ng-container>
+  </div>
+
+  <strong class="text-warning">
+    {{ errorMessage }}
+  </strong>
+</div>

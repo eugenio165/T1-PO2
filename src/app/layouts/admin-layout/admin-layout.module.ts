@@ -1,3 +1,5 @@
+// tslint:disable-next-line: max-line-length
+import { GradienteConjugadoGeneralizadoComponent } from './../../pages/gradiente-conjugado-generalizado/gradiente-conjugado-generalizado.component';
 import { CiclicasComponent } from './../../pages/ciclicas/ciclicas.component';
 import { HookeAndJeevesComponent } from './../../pages/hooke&jeeves/hooke-and-jeeves.component';
 import { FibonacciComponent } from './../../pages/fibonacci/fibonacci.component';
@@ -40,6 +42,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AureaComponent,
     CiclicasComponent,
     HookeAndJeevesComponent,
+    GradienteConjugadoGeneralizadoComponent,
   ],
 })
 

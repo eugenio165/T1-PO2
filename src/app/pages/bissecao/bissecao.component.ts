@@ -60,7 +60,7 @@ export class BissecaoComponent extends MetodoComponent {
 
     // Incrementa numero de iteracoes
     this.numeroInteracoes ++;
-    if (this.numeroInteracoes > 1000) {
+    if (this.numeroInteracoes > 500) {
       this.limpaVariaveis();
       return {i: iteracoes, erro: 'Não convergiu!'};
     }

@@ -1,3 +1,5 @@
+// tslint:disable-next-line: max-line-length
+import { GradienteConjugadoGeneralizadoComponent } from './../../pages/gradiente-conjugado-generalizado/gradiente-conjugado-generalizado.component';
 import { CiclicasComponent } from './../../pages/ciclicas/ciclicas.component';
 import { GradienteComponent } from './../../pages/gradiente/gradiente.component';
 import { HookeAndJeevesComponent } from './../../pages/hooke&jeeves/hooke-and-jeeves.component';
@@ -22,7 +24,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'hooke&jeeves', component: HookeAndJeevesComponent},
     { path: 'gradiente', component: GradienteComponent },
     // { path: 'newton-irrestrito', component: },
-    // { path: 'gradiente-conjugado', component: },
+    { path: 'gradiente-conjugado', component: GradienteConjugadoGeneralizadoComponent },
     // { path: 'fletcher&reeves', component: },
     // { path: 'fletcher-powell', component: },
 ];
