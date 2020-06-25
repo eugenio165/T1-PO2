@@ -3,13 +3,13 @@ import { MetodoComponent, SaidaMetodo } from 'src/app/components/metodo/metodo.c
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-gradiente',
+    selector: 'app-gradiente-conjugado-generalizado',
     templateUrl: './../../components/metodo/metodo.component.html',
     styleUrls: ['./../../components/metodo/metodo.component.scss'],
 })
-export class GradienteComponent extends MetodoComponent {
-    titulo = 'Gradiente';
-    class = 'bg-gradient-warning';
+export class GradienteConjugadoGeneralizadoComponent extends MetodoComponent {
+    titulo = 'Gradiente Conjugado Generalizado';
+    class = 'bg-gradient-default';
     opcoes: Options = { epsilon: true, x0: true, multi: true };
     colunas = {
         xk: 'Xk',
@@ -19,7 +19,6 @@ export class GradienteComponent extends MetodoComponent {
         lk: 'λk',
         xk_1: 'Xk+1',
     };
-    activated = false;
 
     passo(a: number, b: number, iteracoes: object[], delta?: number, epsilon?: number, x0?: string): SaidaMetodo {
         const pontoInicial = x0.split(',');
@@ -27,6 +26,9 @@ export class GradienteComponent extends MetodoComponent {
         if (numeros.length !== this.funcao.params.length) {
             return { erro: 'O número de entradas no X0 nao bate com o numéro de variavéis na função!' };
         }
+
+
+        // ================
         var k = 0;
         var xk = numeros;
         var xk_1;

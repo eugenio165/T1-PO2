@@ -16,17 +16,35 @@ export interface Options {
   styleUrls: ['./interpretador.component.scss']
 })
 export class InterpretadorComponent implements OnInit {
-  // Opcoes para mostrar ou nao as caixas de entrada do delta ou epsilon
+  /**
+   * Opcoes para mostrar ou nao as caixas de entrada do delta ou epsilon
+   */
   @Input() options: Options = { delta: true, epsilon: true, x0: true, intervalo: true, multi: false };
-  // Evento que emite os dados de entrada, quando o usuario aperta Buscar
+
+  /**
+   * Evento que emite os dados de entrada, quando o usuario aperta Buscar
+   */
   @Output() functionData = new EventEmitter<DadosEntrada>();
-  // Evento que emite ao usuario apertar Limpar
+
+  /**
+   * Evento que emite ao usuario apertar Limpar
+   */
   @Output() clearData = new EventEmitter();
 
-  // Form de input, para validar as entradas
+  /**
+   * Form de input, para validar as entradas
+   */
   inputForm: FormGroup;
 
-  // Erro para ser mostrado no input de função, caso houver
+  /**
+   * Mensagems para mostar em baixo do interpretador
+   */
+  messages: string[] = null;
+  errorMessage: string = null;
+
+  /**
+   * Erro para ser mostrado no input de função, caso houver
+   */
   functionError = null;
 
   constructor(
@@ -45,7 +63,7 @@ export class InterpretadorComponent implements OnInit {
     };
     // Form de entrada do usuario
     this.inputForm = this.fb.group({
-      funcao: ['f(x1, x2) = (x1 -2)^4 + (x1-2x2)^2', Validators.required],
+      funcao: ['f(x1, x2) = 4x1^2 + 2x1x2 + 2x2^2 + x1 + x2', Validators.required],
     });
 
     // Se o A estiver ativado na configuracao, cria mais um campo do forms
@@ -75,12 +93,30 @@ export class InterpretadorComponent implements OnInit {
     // Limpa os dados dos forms e emite o evento de clear para o componente pai
     this.inputForm.reset();
     this.clearData.emit();
+    this.functionError = null;
+    this.messages = null;
+    this.errorMessage = null;
+  }
+
+  montaStringSimbolosInterpretados(functionNode): string {
+    const symbols = functionNode.filter((node) => {
+      return node.isSymbolNode;
+    });
+    const distinctSymbols = new Set<string>(symbols.map((node) => node.name));
+    let msgstring = '';
+    distinctSymbols.forEach((symbolName) => {
+       msgstring = msgstring.concat(`${symbolName}, `);
+    });
+    return msgstring;
   }
 
   sendInfo() {
     // Emite um evento de limpar dados (usados no componente pai para limpar a tabela e etc)
     this.clearData.emit();
     this.functionError = null;
+    this.messages = null;
+    this.errorMessage = null;
+
     const form = this.inputForm.value;
     let funcaoOBJ;
     try {
@@ -91,6 +127,19 @@ export class InterpretadorComponent implements OnInit {
       this.functionError = 'Há algum símbolo não suportado na função!!';
       return;
     }
+    const simbolos = this.montaStringSimbolosInterpretados(funcaoOBJ);
+    const functionString = funcaoOBJ.toString();
+    const paramLength = funcaoOBJ.params.length;
+    const functionSymbolsLength = new Set(funcaoOBJ.filter((n) => n.isSymbolNode).map((n) => n.name)).size;
+    if (paramLength !== functionSymbolsLength) {
+      // tslint:disable-next-line: max-line-length
+      this.errorMessage = `A função foi passada com ${paramLength} paramêtros, mas foi encontrado ${functionSymbolsLength} variáveis, verifique a função!!!`;
+    }
+    this.messages = [
+      `Função Interpretada: ${functionString}`,
+      `Variáveis interpretadas: ${simbolos}`,
+    ];
+
     if (funcaoOBJ.type !== 'FunctionAssignmentNode') {
       // Declaração da função no forms está errado!, mostra o div com texto de erro!
       this.functionError = 'O formato da função está errada! Ex: f(x) = 2x^2 + 7x + 2';
@@ -146,17 +195,28 @@ export class InterpretadorComponent implements OnInit {
 
 export interface DadosFuncao {
   obj: any;
-  // Contém os caracteres das variaveis inseridas pelo usuario, ex: f(x) - x, f(u) - u;
+
+  /**
+   * Contém os caracteres das variaveis inseridas pelo usuario, ex: f(x) - x, f(u) - u;
+   */
   params: string[];
-  // Contém a função que o usuario inseriu pronta para uso
+
+  /**
+   * Contém a função que o usuario inseriu pronta para uso
+   */
   eval: Function;
-  // Contem a derivada primeira da funcao, pronta para uso
+
+  /**
+   * Contem a derivada primeira da funcao, pronta para uso
+   */
   d1: any;
-  // Derivada segunda da função inserida pelo usuario
+
+  /**
+   * Derivada segunda da função inserida pelo usuario
+   */
   d2: any;
 }
 
-// Dados inseridos pelo usuario
 export interface DadosEntrada {
   funcao: DadosFuncao;
   a: number;

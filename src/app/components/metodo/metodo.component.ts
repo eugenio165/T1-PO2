@@ -1,36 +1,73 @@
+import { DecimalPipe } from '@angular/common';
 import { DadosEntrada, DadosFuncao, Options } from './../interpretador/interpretador.component';
 import * as math from 'mathjs';
 
-// Objeto que a função passo retornará
+/**
+ * Objeto que a função passo retornará
+ */
 export interface SaidaMetodo {
-  // Array das iterações para mostra na tabela
+  /**
+   * Array das iterações para mostra na tabela
+   */
   i?: Array<object>;
-  // String de resposta para ser mostrada no final da tabela caso sucesso
+  /**
+   * String de resposta para ser mostrada no final da tabela caso sucesso
+   */
   res?: string;
-  // String de erro para ser apresentado caso der erro
+
+  /**
+   * String de erro para ser apresentado caso der erro
+   */
   erro?: string;
 }
 
 export abstract class MetodoComponent {
-  // Titulo do componente
+  /**
+   * Título do componente que aparece na view
+   */
   abstract titulo: string;
-  // Classe do css
+
+  /**
+   * Classe de css da cor do fundo
+   */
   abstract class: string;
-  // Colunas para a tabela de iterações
+
+  /**
+   * As colunas que serão demonstradas na tabela de iterações
+   */
   abstract colunas: Array<string> | Object;
-  // Objeto para setar as configuracoes do interpretador
+
+  /**
+   * Objeto para setar as configuracoes do interpretador, como quais caixas
+   * de input devem ser mostradas
+   */
   abstract opcoes: Options;
-  // Quantidade de numeros apos a virgula para mostrar na tabela
+
+  /**
+   * Quantidade de numeros apos a virgula para mostrar na tabela
+   */
   precisao: number;
-  // Objeto de saida do metodo para ser enviado para a tabela
+
+  /**
+   * Objeto de saida do metodo para ser enviado para a tabela
+   */
   resposta: SaidaMetodo;
-  // Recebe a string com a variavel iniserida pelo usuario
+
+  /**
+   * Recebe a string com a variavel iniserida pelo usuario
+   */
   protected arg: string;
-  // Dados da funcao inserida pelo usuario;
+
+  /**
+   * Dados da funcao inserida pelo usuario;
+   */
   protected funcao: DadosFuncao;
 
   callstack = 0;
 
+  /**
+   * Contém tudo que o usuário inseriu nos campos de input
+   */
   protected entrada: DadosEntrada;
 
   constructor() { }
@@ -54,15 +91,20 @@ export abstract class MetodoComponent {
       this.resposta = this.passo(dados.a, dados.b, [], dados.delta, dados.epsilon, dados.x0);
     } catch (e) {
       console.log(e);
-      this.resposta = { i: null, erro: 'Não convergiu!', res: null };
+      this.resposta = { i: null, erro: 'Não convergiu! Verifique a função interpretada acima!', res: null };
     }
 
     // Scrolla o HTML, usado para scrollar até o final da tabela
     setTimeout(() => {
       div.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+    }, 1000);
   }
 
+  /**
+   * Caso delta não for passado, devolve um array de string para vc jogar no método calculaNovaFuncao.
+   * Esse método calcula xk + delta * direcao para cada componente do array xk. caso for passado
+   * valor de delta na função, é devolvido o resultado do cálculo.
+   */
   calculaY(xk: Array<number>, direcao: Array<number>, delta?: number) {
     const array = [];
     for (let i = 0; i < xk.length; i++) {
@@ -75,12 +117,18 @@ export abstract class MetodoComponent {
     return array;
   }
 
+  /**
+   * Faz a subtração de dois arrays (pontos)
+   */
   calculaSubtracao(ar1: Array<number>, ar2: Array<number>) {
     return ar1.map((val, index) => {
       return val - ar2[index];
     });
   }
 
+  /**
+   * Calcula a normal do array
+   */
   calculaNormal(ar1: Array<number>) {
     const sum = ar1.reduce((prev, current) => {
       return prev + Math.pow(current, 2);
@@ -88,8 +136,10 @@ export abstract class MetodoComponent {
     return Math.sqrt(sum);
   }
 
-  // Gera a função para ser minimizada via newton atraves dos valores de delta
-  calculaNovaFuncao(xk) {
+  /**
+   * Recebe um array de string (xk + DELTA * direção) e devolve o objeto da função montada em função de delta
+   */
+  calculaNovaFuncao(xk): DadosFuncao {
     let funcstring: string = this.funcao.obj.expr.toString();
     this.funcao.params.forEach((param , index) => {
       const regex = new RegExp(param, 'g');
@@ -108,6 +158,9 @@ export abstract class MetodoComponent {
     };
   }
 
+  /**
+   * Método de newton usado para fazer as minimizações nos outros métodos
+   */
   newton(epsilon, funcao, arg, xk?) {
     xk = (!xk) ? 0 : xk;
     // Objeto para passar pra funcao avaliar o resultado
@@ -146,13 +199,73 @@ export abstract class MetodoComponent {
     }
   }
 
-  // Função usada pra limitar a precisao, e obter resultados consistentes como feito em sala de aula
+  /**
+   * Função usada pra limitar a precisao das casa decimais, e obter resultados consistentes como feito em sala de aula
+   */
   limitaPrecisao(num: number): number {
     return Number(num.toFixed(this.precisao));
   }
 
-  // Função que realiza o passo do metodo e retorna o objeto SaidaMetodo, com as iteracoes, erro, e resultado
+  /**
+   * Função que realiza o passo do metodo e retorna o objeto SaidaMetodo, com as iteracoes, e resultado ou o erro
+   */
   // tslint:disable-next-line:max-line-length
   abstract passo(a: number, b: number, iteracoes: Array<object>, delta?: number, epsilon?: number, x0?: string | number): SaidaMetodo;
+
+  /**
+   * Recebe um array ou resultado e formata num string.
+   *
+   * No caso de um array o resultado da string fica assim: (x1, x2, x3)
+   */
+  formataResultado(resultado: number | number[]): string {
+    const numberPipe = new DecimalPipe('en-US');
+    const setting = '1.0-' + (this.precisao);
+
+    if (typeof resultado === 'number') {
+      return numberPipe.transform(resultado, setting);
+    } else {
+      let formatedResult = '(';
+      resultado.forEach((val, index) => {
+        formatedResult = formatedResult.concat(numberPipe.transform(val, setting)) + ',';
+      });
+      formatedResult = formatedResult.concat(')');
+      return formatedResult;
+    }
+  }
+
+  /**
+   * Recebe os valor das variáveis para substituir no cálculdo do gradiente e retorna o gradiente calculado
+   */
+  calculaGradiente(array: number[]): number[] {
+    const obj1 = {};
+    obj1[this.funcao.params[0]] = array[0];
+    obj1[this.funcao.params[1]] = array[1];
+
+    const gradienteCalculado = this.funcao.params.map((variable) => {
+      const funcaoDerivada = this.funcao.d1[variable];
+      return funcaoDerivada({...obj1});
+    });
+
+    return gradienteCalculado;
+  }
+
+  /**
+   * Retorna a direção, de acordo com o indíce passado,ex:
+   *
+   * index = 1 retorna [1,0]
+   *
+   * index = 2 retorna [0,1]
+   */
+  pegaDirecaoCilindricas(index: number): number[] {
+    const array = [];
+    for (let i = 0; i < this.funcao.params.length; i++) {
+      if (i === index - 1) {
+        array.push(1);
+      } else {
+        array.push(0);
+      }
+    }
+    return array;
+  }
 
 }
