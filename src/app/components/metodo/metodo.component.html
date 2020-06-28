@@ -7,13 +7,25 @@
       <app-interpretador
         [options]="opcoes"
         (functionData)="calcularMetodo($event, end)"
-        (clearData)="this.resposta = null;"
+        (clearData)="this.resposta = null; this.entrada = null;"
         ></app-interpretador>
     </div>
   </div>
 </div>
 
 <!-- Tabela de iteracoes -->
-<app-tabela-iteracoes [colunas]="colunas" [resultado]="resposta?.res" [iteracoes]="resposta?.i" [precisao]="precisao" [erro]="resposta?.erro"></app-tabela-iteracoes>
+<app-tabela-iteracoes *ngIf="!!resposta" [colunas]="colunas" [resultado]="resposta?.res" [iteracoes]="resposta?.i" [precisao]="precisao" [erro]="resposta?.erro"></app-tabela-iteracoes>
 <!-- Usado para scrollar ate o final da pagina, depois do calculo -->
 <div #end></div>
+
+<div class="container-fluid mt--7" *ngIf="!!entrada && !resposta">
+  <div class="row">
+    <div class="col">
+        <ng-container >
+          <div class="alert alert-success">
+            <h4 style="color: white;">Calculando...</h4>
+          </div>
+        </ng-container>
+    </div>
+  </div>
+</div>
