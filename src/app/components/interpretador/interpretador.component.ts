@@ -2,12 +2,35 @@ import { FormBuilder, Validators, FormGroup, ValidatorFn, AbstractControl } from
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as math from 'mathjs';
 
+/**
+ * Opções do componente para o interpretador
+ */
 export interface Options {
+  /**
+   * Se deve mostrar o input para o delta
+   */
   delta?: boolean;
+  /**
+   * Se deve mostrar o input para o epsilon
+   */
   epsilon?: boolean;
+  /**
+   * Se deve mostrar o input para o intervalo
+   */
   intervalo?: boolean;
+  /**
+   * Se deve mostrar o input para o X0
+   */
   x0?: boolean;
+  /**
+   * Se é multi-variável ou não
+   */
   multi?: boolean;
+  /**
+   * Se true, devolve o campo hessiana da funçao populado com a hessiana, como acontece
+   * com d1 e d2 (derivada em relação a x1 e derivada em relação a x2)
+   */
+  hessiana?: boolean;
 }
 
 @Component({
@@ -149,8 +172,10 @@ export class InterpretadorComponent implements OnInit {
       this.functionError = 'Falta a variavel na declaração da funçao!';
       return;
     }
-    // Derivada primeira e segunda da funcao
+    // Derivada primeira e segunda da funcao para cada variável
+    // (é um objeto com as chaves sendo as variaveis e o valor a função de eval para aquela derivada)
     let derivada1, derivada2;
+    const hessiana: Function[][] = [];
     if (this.options.multi) {
       const derivadas1 = {};
       const derivadas2 = {};
@@ -160,6 +185,16 @@ export class InterpretadorComponent implements OnInit {
         derivadas1[funcaoOBJ.params[i]] = d1Compiled.eval;
         const d2Compiled = math.derivative(d1, funcaoOBJ.params[i]).compile();
         derivadas2[funcaoOBJ.params[i]] = d2Compiled.eval;
+
+        // Calcula a hessiana
+        if (this.options.hessiana) {
+          const hessianaLinhaXi = [];
+          for (let j = 0; j < funcaoOBJ.params.length; j++) {
+            const derivadaXiXj = math.derivative(d1, funcaoOBJ.params[j]);
+            hessianaLinhaXi.push(derivadaXiXj.compile().eval);
+          }
+          hessiana.push(hessianaLinhaXi);
+        }
       }
       derivada1 = derivadas1;
       derivada2 = derivadas2;
@@ -171,24 +206,29 @@ export class InterpretadorComponent implements OnInit {
       derivada1 = d1.eval;
       derivada2 = d2.eval;
     }
-    // Emite os dados das funções para seu metodo usar
-    this.functionData.emit({
-      funcao: {
-        // Contem qual letra foi usada pra fazer a função; Ex; f(x) - variavel x; f(y) - variavel y
-        params: funcaoOBJ.params,
-        // Compila a função inserida pelo usuário
-        obj: funcaoOBJ,
-        ...funcaoOBJ.expr.compile(),
-        // Primeira Derivada
-        d1: derivada1,
-        d2: derivada2,
-      },
-      a: form.a,
-      b: form.b,
-      delta: form.delta,
-      epsilon: form.epsilon,
-      x0: form.x0,
-    });
+
+    setTimeout(() => {
+      // Emite os dados das funções para seu metodo usar
+      this.functionData.emit({
+        funcao: {
+          // Contem qual letra foi usada pra fazer a função; Ex; f(x) - variavel x; f(y) - variavel y
+          params: funcaoOBJ.params,
+          // Compila a função inserida pelo usuário
+          obj: funcaoOBJ,
+          ...funcaoOBJ.expr.compile(),
+          // Primeira Derivada
+          d1: derivada1,
+          d2: derivada2,
+          hessiana,
+        },
+        a: form.a,
+        b: form.b,
+        delta: form.delta,
+        epsilon: form.epsilon,
+        x0: form.x0,
+      });
+
+    }, 100);
   }
 
 }
@@ -215,6 +255,8 @@ export interface DadosFuncao {
    * Derivada segunda da função inserida pelo usuario
    */
   d2: any;
+
+  hessiana?: Function[][];
 }
 
 export interface DadosEntrada {

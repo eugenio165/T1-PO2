@@ -234,16 +234,28 @@ export abstract class MetodoComponent {
   }
 
   /**
+   * Recebe um array como: [1, 2]
+   * e atribiu para o parametro 0 da função o valor 1, o parametro 1 da função o valor 2
+   * e assim por diante num objeto que é jogado para e eval de uma função gerada pelo math.js
+   * @param valores Array com os valores para cada parâmetro, na ordem correta
+   */
+  montaObjetoParaFuncao(valores: number[]) {
+    const obj = {};
+    valores.forEach((value, index) => {
+      obj[this.funcao.params[index]] = value;
+    });
+    return obj;
+  }
+
+  /**
    * Recebe os valor das variáveis para substituir no cálculdo do gradiente e retorna o gradiente calculado
    */
   calculaGradiente(array: number[]): number[] {
-    const obj1 = {};
-    obj1[this.funcao.params[0]] = array[0];
-    obj1[this.funcao.params[1]] = array[1];
+    const obj = this.montaObjetoParaFuncao(array);
 
     const gradienteCalculado = this.funcao.params.map((variable) => {
       const funcaoDerivada = this.funcao.d1[variable];
-      return funcaoDerivada({...obj1});
+      return funcaoDerivada({...obj});
     });
 
     return gradienteCalculado;
@@ -266,6 +278,29 @@ export abstract class MetodoComponent {
       }
     }
     return array;
+  }
+
+  /**
+   * Recebe um array dos valores dos parâmetros da função e gospe o valor calculado
+   * da hessian,
+   *
+   * ex: [ 0, 2, 3.2] = x1: 0, x2: 2, x3: 3.2
+   *
+   * ex: [ 0, 3, 4] = y1: 0, y2: 3, y3: 4, etc
+   * depende de como o usuário inseriu os parâmetros
+   */
+  calculaHessiana(valores: number[]): number[][] {
+    const obj = this.montaObjetoParaFuncao(valores);
+    const result = [];
+    for (let i = 0; i < this.funcao.params.length; i++) {
+      const linhaXi = [];
+      for (let k = 0; k < this.funcao.params.length; k++) {
+        const res = this.funcao.hessiana[i][k]({...obj});
+        linhaXi.push(res);
+      }
+      result.push(linhaXi);
+    }
+    return result;
   }
 
 }
