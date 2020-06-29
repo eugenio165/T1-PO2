@@ -12,7 +12,7 @@ export class NewtonIrrestritoComponent extends MetodoComponent {
 
   titulo = 'Método de Newton Irrestrito';
   class = 'bg-gradient-danger';
-  opcoes = { epsilon: true, intervalo: true };
+  opcoes = { epsilon: true, intervalo: true, multi: true, hessiana: true };
   colunas = ['x', 'd1x', 'd2x', 'Xk_1'];
   xk = 0;
 
@@ -27,8 +27,7 @@ export class NewtonIrrestritoComponent extends MetodoComponent {
         return { erro: 'O número de entradas no X0 nao bate com o numéro de variavéis na função!' };
     }
 
-    // ================
-    throw new Error("Method not implemented.");
+
   }
 
-
+}
