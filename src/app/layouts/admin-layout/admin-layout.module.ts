@@ -1,3 +1,4 @@
+import { NewtonIrrestritoComponent } from './../../pages/newtonirrestrito/newtonirrestrito.component';
 // tslint:disable-next-line: max-line-length
 import { GradienteConjugadoGeneralizadoComponent } from './../../pages/gradiente-conjugado-generalizado/gradiente-conjugado-generalizado.component';
 import { CiclicasComponent } from './../../pages/ciclicas/ciclicas.component';
@@ -42,6 +43,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AureaComponent,
     CiclicasComponent,
     HookeAndJeevesComponent,
+    NewtonIrrestritoComponent,
     GradienteConjugadoGeneralizadoComponent,
   ],
 })
