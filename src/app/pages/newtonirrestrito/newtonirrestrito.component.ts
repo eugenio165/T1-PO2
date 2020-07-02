@@ -32,3 +32,4 @@ export class NewtonIrrestritoComponent extends MetodoComponent {
   }
 
 
+}

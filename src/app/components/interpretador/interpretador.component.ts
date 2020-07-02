@@ -86,7 +86,7 @@ export class InterpretadorComponent implements OnInit {
     };
     // Form de entrada do usuario
     this.inputForm = this.fb.group({
-      funcao: ['f(x1, x2) = 4x1^2 + 2x1x2 + 2x2^2 + x1 + x2', Validators.required],
+      funcao: ['f(x1, x2) = 4x1^2 + 2x1*x2 + 2x2^2 + x1 + x2', Validators.required],
     });
 
     // Se o A estiver ativado na configuracao, cria mais um campo do forms
