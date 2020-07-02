@@ -1,4 +1,5 @@
 // tslint:disable-next-line: max-line-length
+import { NewtonIrrestritoComponent } from './../../pages/newtonirrestrito/newtonirrestrito.component';
 import { GradienteConjugadoGeneralizadoComponent } from './../../pages/gradiente-conjugado-generalizado/gradiente-conjugado-generalizado.component';
 import { FletcherReevesComponent } from './../../pages/fletcher-reeves/fletcher-reeves';
 import { DavidonFletcherPowellComponent } from './../../pages/davidon/Davidon-Fletcher-Powell';
@@ -25,7 +26,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'coordenadas-ciclicas', component: CiclicasComponent },
     { path: 'hooke&jeeves', component: HookeAndJeevesComponent},
     { path: 'gradiente', component: GradienteComponent },
-    // { path: 'newton-irrestrito', component: },
+    { path: 'newton-irrestrito', component: NewtonIrrestritoComponent},
     { path: 'gradiente-conjugado', component: GradienteConjugadoGeneralizadoComponent },
     { path: 'fletcher&reeves', component: FletcherReevesComponent },
     { path: 'fletcher-powell', component: DavidonFletcherPowellComponent }
