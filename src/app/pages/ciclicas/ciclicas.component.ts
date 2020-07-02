@@ -1,7 +1,6 @@
 import { Options } from '../../components/interpretador/interpretador.component';
 import { MetodoComponent, SaidaMetodo } from 'src/app/components/metodo/metodo.component';
 import { Component } from '@angular/core';
-import * as math from 'mathjs';
 
 @Component({
   selector: 'app-ciclicas',
@@ -19,37 +18,24 @@ export class CiclicasComponent extends MetodoComponent {
     super();
   }
 
-  pegaDirecaoClindricas(index) {
-    const array = [];
-    for (let i = 0; i < this.funcao.params.length; i++) {
-      if (i === index - 1) {
-        array.push(1);
-      } else {
-        array.push(0);
-      }
-    }
-    return array;
-  }
-
   passo(a: number, b: number, iteracoes: object[], delta?: number, epsilon?: number, x0?: string): SaidaMetodo {
     const pontoInicial = x0.split(',');
     const numeros = pontoInicial.map(string => Number(string.trim()));
     if (numeros.length !== this.funcao.params.length) {
       return { erro: 'O número de entradas no X0 nao bate com o numéro de variavéis na função!' };
     }
-    console.log(this.funcao);
 
-    var k = 0;
-    var xk = numeros;
-    var xk_1 = numeros.map(e => 10000);
-    var sub = this.calculaSubtracao(xk_1, xk);
+    let k = 0;
+    let xk = numeros;
+    let xk_1 = numeros.map(e => 10000);
+    let sub = this.calculaSubtracao(xk_1, xk);
     // COndicao de parada
-    while (this.calculaNormal(sub) >= epsilon) {
+    while (this.calculaNormal(sub) >= epsilon && k < 500) {
       k++;
-      var y = [xk];
-      var index = 1;
+      const y = [xk];
+      let index = 1;
       for (index = 1; index <= this.funcao.params.length; index++) {
-        const direcao = this.pegaDirecaoClindricas(index);
+        const direcao = this.pegaDirecaoCilindricas(index);
         let lambida;
         try {
           y.push(this.calculaY(y[index - 1], direcao));
@@ -67,12 +53,17 @@ export class CiclicasComponent extends MetodoComponent {
         } catch (e) {
           return { erro: e};
         }
-        iteracoes.push({j: index, Yj: y[index - 1], Dj: direcao, Lambida: lambida, Yj1: y[index] })
+        iteracoes.push({j: index, Yj: y[index - 1], Dj: direcao, Lambida: lambida, Yj1: y[index], k });
       }
       sub = this.calculaSubtracao(y[index - 1], xk);
       xk = y[index - 1];
     }
-    return { i: iteracoes };
+    if (k >= 500)
+      throw '';
+
+    const resultado = iteracoes[iteracoes.length - 1]['Yj1'];
+    const resultadoString = this.formataResultado(resultado);
+    return { i: iteracoes, res: `X* = ${resultadoString}` };
   }
 
 }

@@ -26,10 +26,12 @@ export class SidebarComponent implements OnInit {
     { path: '/coordenadas-ciclicas', title: 'Coordenadas Cíclicas',  icon: 'ni-planet text-danger', class: '' },
     { path: '/hooke&jeeves', title: 'Hooke & Jeeves',  icon: 'ni-map-big text-primary', class: '' },
     { path: '/gradiente', title: 'Gradiente',  icon: 'ni-compass-04 text-info', class: '' },
-    // { path: '/newton-irrestrito', title: 'Newton',  icon: 'ni-chart-bar-32 text-warning upside-down', class: '' },
-    // { path: '/gradiente-conjugado', title: 'Gradiente Conjugado Generalizado',  icon: 'ni-chart-pie-35 text-warning', class: '' },
+    { path: '/newton-irrestrito', title: 'Newton Irrestrito',  icon: 'ni-chart-bar-32 text-warning upside-down', class: '' },
+    { path: '/gradiente-conjugado', title: 'Gradiente Conjugado Generalizado',  icon: 'ni-chart-pie-35 text-warning', class: '' },
     // { path: '/fletcher&reeves', title: 'Fletcher & Reeves',  icon: 'ni-ruler-pencil text-warning', class: '' },
     // { path: '/fletcher-powell', title: 'Davidon-Fletcher-Powell',  icon: 'ni-spaceship text-default', class: '' },
+    { path: '/fletcher&reeves', title: 'Fletcher & Reeves', icon: 'ni-ruler-pencil text-warning', class: '', },
+    { path: '/fletcher-powell', title: 'Davidon-Fletcher-Powell', icon: 'ni-spaceship text-default', class: '', },
   ]
   public menuItems: any[];
   public isCollapsed = true;

@@ -17,7 +17,12 @@
             <tbody>
               <tr *ngFor="let iteracao of iteracoes; let i = index" [ngClass]="{'result': i + 1 == iteracoes.length}">
                 <ng-container *ngIf="iteracao['k']; else SEMK">
-                  <td>{{ iteracao['k'] }}</td>
+                  <ng-container *ngIf="i == 0 || iteracao['k'] != iteracoes[i-1]['k']; else MESMOK">
+                    <td>{{ iteracao['k'] }}</td>
+                  </ng-container>
+                  <ng-template #MESMOK>
+                    <td></td>
+                  </ng-template>
                 </ng-container>
                 <ng-template #SEMK>
                   <td>{{ i }}</td>
