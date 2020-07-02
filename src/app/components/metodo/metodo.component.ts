@@ -68,7 +68,7 @@ export abstract class MetodoComponent {
   /**
    * Contém tudo que o usuário inseriu nos campos de input
    */
-  protected entrada: DadosEntrada;
+  entrada: DadosEntrada;
 
   constructor() { }
 
