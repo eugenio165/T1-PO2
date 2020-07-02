@@ -70,7 +70,6 @@ export class NewtonIrrestritoComponent extends MetodoComponent {
         cont++;
       }
 
-
     if(cont > 100){
       return { erro: 'O método não conseguiu encontrar o mínimo dessa função!' };
 

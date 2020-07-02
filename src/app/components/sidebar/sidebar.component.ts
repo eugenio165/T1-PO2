@@ -30,6 +30,8 @@ export class SidebarComponent implements OnInit {
     { path: '/gradiente-conjugado', title: 'Gradiente Conjugado Generalizado',  icon: 'ni-chart-pie-35 text-warning', class: '' },
     // { path: '/fletcher&reeves', title: 'Fletcher & Reeves',  icon: 'ni-ruler-pencil text-warning', class: '' },
     // { path: '/fletcher-powell', title: 'Davidon-Fletcher-Powell',  icon: 'ni-spaceship text-default', class: '' },
+    { path: '/fletcher&reeves', title: 'Fletcher & Reeves', icon: 'ni-ruler-pencil text-warning', class: '', },
+    { path: '/fletcher-powell', title: 'Davidon-Fletcher-Powell', icon: 'ni-spaceship text-default', class: '', },
   ]
   public menuItems: any[];
   public isCollapsed = true;
