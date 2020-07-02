@@ -41,6 +41,7 @@ export class NewtonIrrestritoComponent extends MetodoComponent {
     var normagradiente;
     var distanciaponto;
     var condição = true;
+    var cont = 0;
 
     while(condição){
       hessianaXk = this.calculaHessiana(xk);
@@ -55,32 +56,31 @@ export class NewtonIrrestritoComponent extends MetodoComponent {
       inversahessianaXk[1][0] = -inversahessianaXk[1][0];
 
       w = math.multiply(math.multiply(gradienteXk,(-1)),inversahessianaXk);
-
-
       xk_1 = math.chain(xk).add(w);
-      console.log(w);
-      console.log(xk);
-      console.log(xk_1);
-
 
       gradienteXk = this.calculaGradiente(xk_1);
       normagradiente = math.sqrt((gradienteXk[0]*gradienteXk[0]) + (gradienteXk[1]*gradienteXk[1]));
       distanciaponto = math.sqrt((xk[0]*xk_1[0]) + (xk[1]*xk_1[1]));
       
-      if((e > normagradiente) || (e > distanciaponto)){
+      if((e > normagradiente) || (e > distanciaponto) || cont > 100){
         condição = false;
       }
       else{
         xk = xk_1;
+        cont++;
       }
 
+
+    if(cont > 100){
+      return { erro: 'O método não conseguiu encontrar o mínimo dessa função!' };
+
     }
-    console.log(xk);
+    else{
+      const res = this.formataResultado(xk);
+      return { i: iteracoes, res: `X* = ${res}` };
 
-    const res = this.formataResultado(xk);
-    return { i: iteracoes, res: `X* = ${res}` };
-    
-    
+    }
+      
+    }
   }
-
 }
